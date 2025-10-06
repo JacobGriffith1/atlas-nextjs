@@ -1,12 +1,11 @@
-type TopicPageProps = {
-  params: { id: string }; // App Router injects route params.
-  searchParams: Record<string, string | string[] | undefined>;
+// app/ui/topics/[id]/page.tsx
+
+type Props = {
+  params: Promise<{ id: string }>;
 };
 
 async function loadTopic(id: string) {
-  // Placeholder for server-side data fetching (DB/API); keeps I/O at the edge.
-  // Replace this with real fetch once backend is ready.
-  await new Promise((r) => setTimeout(r, 400)); // simulate latency
+  await new Promise((r) => setTimeout(r, 400));
   return {
     id,
     name: `Topic ${id}`,
@@ -17,8 +16,10 @@ async function loadTopic(id: string) {
   };
 }
 
-export default async function TopicPage({ params }: TopicPageProps) {
-  const topic = await loadTopic(params.id); // Server component can await directly.
+export default async function TopicPage({ params }: Props) {
+  const { id } = await params;
+
+  const topic = await loadTopic(id);
 
   return (
     <div className="space-y-6">
