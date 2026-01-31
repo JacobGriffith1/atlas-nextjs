@@ -5,8 +5,12 @@ import { fetchQuestions, fetchTopic } from "@/lib/data";
 export default async function Page({ params }: { params: { id: string } }) {
   const topicId = params.id;
 
+  // Skeleton Test
+  // await new Promise((r) => setTimeout(r, 1600));
+
   const topic = await fetchTopic(topicId);
   const questions = await fetchQuestions(topicId);
+  
 
   if (!topic) {
     return (
