@@ -2,12 +2,12 @@ import { AskQuestion } from "@/components/AskQuestion";
 import { Question } from "@/components/Question";
 import { fetchQuestions, fetchTopic } from "@/lib/data";
 
-type PageProps = {
+type Props = {
   params: Promise<{ id: string }>;
 };
 
-export default async function Page({ params }: PageProps) {
-  const { id: topicId } = await params;
+export default async function Page(props: Props) {
+  const { id: topicId } = await props.params;
 
   const topic = await fetchTopic(topicId);
   const questions = await fetchQuestions(topicId);
