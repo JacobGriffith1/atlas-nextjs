@@ -1,23 +1,38 @@
-import { ListBulletIcon } from "@heroicons/react/24/outline";
-import clsx from "clsx";
+"use client";
 
-type Props = {
-  name: string;
+import exp from "constants";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+
+type NavLinkProps = {
   href: string;
+  children: React.ReactNode;
+  className?: string;
+  activeClassName?: string;
+  exact?: boolean;
 };
 
-export default function NavLink({ name, href }: Props) {
+export default function NavLink({
+  href,
+  children,
+  className = "",
+  activeClassName = "",
+  exact = false,
+}: NavLinkProps) {
+  const pathname = usePathname();
+
+  const isActive = exact ? pathname === href : pathname.startsWith(href);
+
+  const combinedClassName = [
+    className,
+    isActive ? activeClassName: "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   return (
-    <a
-      key={name}
-      href={href}
-      className={clsx(
-        "flex md:hidden h-[48px] grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-primary-foreground md:flex-none md:justify-start md:p-2 md:px-3",
-        {}
-      )}
-    >
-      <ListBulletIcon className="w-6" />
-      <p className="md:block">{name}</p>
-    </a>
+    <Link href={href} className={combinedClassName}>
+      {children}
+    </Link>
   );
 }
