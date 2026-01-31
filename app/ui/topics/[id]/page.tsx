@@ -2,15 +2,15 @@ import { AskQuestion } from "@/components/AskQuestion";
 import { Question } from "@/components/Question";
 import { fetchQuestions, fetchTopic } from "@/lib/data";
 
-export default async function Page({ params }: { params: { id: string } }) {
-  const topicId = params.id;
+type PageProps = {
+  params: Promise<{ id: string }>;
+};
 
-  // Skeleton Test
-  // await new Promise((r) => setTimeout(r, 1600));
+export default async function Page({ params }: PageProps) {
+  const { id: topicId } = await params;
 
   const topic = await fetchTopic(topicId);
   const questions = await fetchQuestions(topicId);
-  
 
   if (!topic) {
     return (
