@@ -31,7 +31,13 @@ export default async function Page(props: Props) {
 
       <section className="rounded-md overflow-hidden">
         {questions.map((q) => (
-          <Question key={q.id} id={q.id} text={q.title} votes={q.votes} />
+          <Question
+            key={q.id}
+            id={q.id}
+            topicId={topicId}
+            text={q.title}
+            votes={q.votes}
+          />
         ))}
       </section>
     </main>
