@@ -14,9 +14,14 @@ export default function VoteButton({
     <form action={action}>
       <button
         type="submit"
-        className="h-8 w-8 min-w-[2rem] rounded-full ring-gray-200 hover:text-atlas-teal active:bg-primary active:text-white active:outline-hidden active:ring-2 active:ring-primary"
+        className="h-8 w-8 min-w-[2rem] rounded-full ring-1 ring-gray-200
+                  transition
+                  hover:bg-primary-foreground hover:text-atlas-teal hover:ring-atlas-teal
+                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-atlas-teal
+                  active:bg-primary active:text-white active:ring-primary
+                  cursor-pointer"
       >
-        <HandThumbUpIcon />
+        <HandThumbUpIcon className="transition-transform hover:scale-110" />
       </button>
     </form>
   );
