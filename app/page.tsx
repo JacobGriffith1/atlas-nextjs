@@ -14,7 +14,7 @@ export default function Page() {
           About
         </Link>
         <Link className="underline" href="/ui">
-          UI (logged-in home)
+          Log in
         </Link>
       </nav>
     </main>
