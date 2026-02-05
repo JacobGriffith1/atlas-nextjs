@@ -1,12 +1,17 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { authenticate } from "./actions";
 
 type Props = { callbackUrl: string };
 
 export default function LoginForm({ callbackUrl }: Props) {
   const [state, formAction, pending] = useActionState(authenticate, {});
+  const [showError, setShowError] = useState(false);
+
+  useEffect(() => {
+    setShowError(Boolean(state.error));
+  }, [state.error]);
 
   return (
     <form
@@ -28,6 +33,7 @@ export default function LoginForm({ callbackUrl }: Props) {
           required
           defaultValue=""
           className="w-full rounded-md border border-gray-200 px-3 py-2 text-sm"
+          onChange={() => setShowError(false)}
         />
       </div>
 
@@ -42,10 +48,11 @@ export default function LoginForm({ callbackUrl }: Props) {
           required
           defaultValue=""
           className="w-full rounded-md border border-gray-200 px-3 py-2 text-sm"
+          onChange={() => setShowError(false)}
         />
       </div>
 
-      {state.error ? (
+      {showError && state.error ? (
         <p className="rounded-md bg-red-50 p-2 text-sm text-red-700">
           {state.error}
         </p>
