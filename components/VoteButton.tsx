@@ -14,12 +14,12 @@ export default function VoteButton({
     <form action={action}>
       <button
         type="submit"
-        className="h-8 w-8 min-w-[2rem] rounded-full ring-1 ring-gray-200
+        className="h-8 w-8 min-w-[2rem] rounded-full
                   transition
-                  hover:bg-primary-foreground hover:text-atlas-teal hover:ring-atlas-teal
+                  cursor-pointer
+                  hover:bg-primary-foreground hover:text-atlas-teal
                   focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-atlas-teal
-                  active:bg-primary active:text-white active:ring-primary
-                  cursor-pointer"
+                  active:bg-primary active:text-white"
       >
         <HandThumbUpIcon className="transition-transform hover:scale-110" />
       </button>
