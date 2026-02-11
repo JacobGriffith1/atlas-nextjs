@@ -1,3 +1,4 @@
+import Link from "next/link";
 import VoteButton from "./VoteButton";
 
 type QuestionProps = {
@@ -13,7 +14,14 @@ export function Question({ id, topicId, text, votes }: QuestionProps) {
       <div className="mr-2 rounded-xl bg-secondary px-2 text-sm text-white">
         {votes}
       </div>
-      <p className="text w-full text-left font-semibold">{text}</p>
+
+      <Link
+        href={`/ui/questions/${id}`}
+        className="text w-full text-left font-semibold hover:underline"
+      >
+        {text}
+      </Link>
+
       <VoteButton topicId={topicId} questionId={id} />
     </div>
   );
