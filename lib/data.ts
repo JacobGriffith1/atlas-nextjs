@@ -1,5 +1,5 @@
 import { sql } from "@vercel/postgres";
-import { Question, Topic, User } from "./definitions";
+import { Answer, Question, Topic, User } from "./definitions";
 
 export async function fetchUser(email: string): Promise<User | undefined> {
   try {
@@ -42,6 +42,16 @@ export async function fetchQuestions(id: string) {
   }
 }
 
+export async function fetchQuestion(id: string) {
+  try {
+    const data = await sql<Question>`SELECT * FROM questions WHERE id = ${id}`;
+    return data.rows && data.rows.length > 0 ? data.rows[0] : null;
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch question.");
+  }
+}
+
 export async function insertQuestion(
   question: Pick<Question, "title" | "topic_id" | "votes">
 ) {
@@ -75,5 +85,43 @@ export async function incrementVotes(id: string) {
   } catch (error) {
     console.error("Database Error:", error);
     throw new Error("Failed to increment votes.");
+  }
+}
+
+export async function fetchAnswers(questionId: string) {
+  try {
+    const data =
+      await sql<Answer>`SELECT * FROM answers WHERE question_id = ${questionId}`;
+    return data.rows;
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to fetch answers.");
+  }
+}
+
+export async function insertAnswer(params: { answer: string; question_id: string }) {
+  try {
+    const result = await sql<Answer>`
+      INSERT INTO answers (answer, question_id)
+      VALUES (${params.answer}, ${params.question_id})
+      RETURNING *
+    `;
+    return result.rows[0];
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to insert answer.");
+  }
+}
+
+export async function setAcceptedAnswer(params: { question_id: string; answer_id: string }) {
+  try {
+    await sql`
+      UPDATE questions
+      SET answer_id = ${params.answer_id}
+      WHERE id = ${params.question_id}
+    `;
+  } catch (error) {
+    console.error("Database Error:", error);
+    throw new Error("Failed to set accepted answer.");
   }
 }

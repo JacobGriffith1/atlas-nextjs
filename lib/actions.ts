@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-import { incrementVotes, insertQuestion, insertTopic } from "./data";
+import { insertAnswer, setAcceptedAnswer, incrementVotes, insertQuestion, insertTopic } from "./data";
 
 function requireNonEmptyString(value: FormDataEntryValue | null, field: string) {
   if (typeof value !== "string") {
@@ -16,26 +16,17 @@ function requireNonEmptyString(value: FormDataEntryValue | null, field: string) 
   return trimmed;
 }
 
-/**
- * Creates a new topic
- * Called from: /ui/topics/new
- */
 export async function createTopic(formData: FormData) {
   const title = requireNonEmptyString(formData.get("title"), "Title");
 
   await insertTopic({ title });
 
-  // Update sidebar (layout) + /ui topic list.
   revalidatePath("/ui", "layout");
   revalidatePath("/ui");
 
   redirect("/ui");
 }
 
-/**
- * Creates a question for a topic
- * Called from: /ui/topics/:id
- */
 export async function createQuestion(topicId: string, formData: FormData) {
   const title = requireNonEmptyString(formData.get("title"), "Question");
 
@@ -47,10 +38,6 @@ export async function createQuestion(topicId: string, formData: FormData) {
   redirect(topicPath);
 }
 
-/**
- * Increments votes for a question
- * Called from: /ui/topics/:id
- */
 export async function upvoteQuestion(topicId: string, questionId: string) {
   await incrementVotes(questionId);
 
@@ -58,4 +45,24 @@ export async function upvoteQuestion(topicId: string, questionId: string) {
   revalidatePath(topicPath);
 
   redirect(topicPath);
+}
+
+export async function createAnswer(questionId: string, formData: FormData) {
+  const answer = requireNonEmptyString(formData.get("answer"), "Answer");
+
+  await insertAnswer({ answer, question_id: questionId });
+
+  const path = `/ui/questions/${questionId}`;
+  revalidatePath(path);
+
+  redirect(path);
+}
+
+export async function acceptAnswer(questionId: string, answerId: string) {
+  await setAcceptedAnswer({ question_id: questionId, answer_id: answerId });
+
+  const path = `/ui/questions/${questionId}`;
+  revalidatePath(path);
+
+  redirect(path);
 }
